@@ -6,10 +6,10 @@
         "thumbnail": "字符混淆/logo.jpg"
     },
     {
-        "title": "文章笔记",
-        "type": "笔记",
-        "link": "文章笔记/index.html",
-       "thumbnail": "文章笔记/logo.jpg"
+        "title": "笔记编辑",
+        "type": "编辑",
+        "link": "笔记编辑/index.html",
+       "thumbnail": "笔记编辑/logo.jpg"
     },
     {
         "title": "字符装饰",
@@ -18,4 +18,5 @@
        "thumbnail": "字符装饰/logo.jpg"
     }
 ]
+
 
