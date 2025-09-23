@@ -1,14 +1,21 @@
 [
     {
         "title": "字符混淆",
-        "type": "字符",
+        "type": "混淆",
         "link": "字符混淆/index.html",
         "thumbnail": "字符混淆/logo.jpg"
     },
     {
+        "title": "文章笔记",
+        "type": "笔记",
+        "link": "文章笔记/index.html",
+       "thumbnail": "文章笔记/logo.jpg"
+    },
+    {
         "title": "字符装饰",
-        "type": "字符",
+        "type": "装饰",
         "link": "字符装饰/index.html",
        "thumbnail": "字符装饰/logo.jpg"
     }
 ]
+
