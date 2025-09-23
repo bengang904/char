@@ -1,0 +1,114 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>文本加解密</title>
+    <style>
+        body {
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background-color: black;
+            color: #00fdf5;
+            font-weight: bold; /* 添加按钮文字加粗样式 */
+        }
+        input[type="text"], button {
+            padding: 10px;
+            margin: 5px;
+        }
+        h3 {
+            font-size: 20px;
+        }
+        button {
+            font-weight: bold;
+            background-color: #00fdf5;
+            width: 80px;
+            height: 30px;
+            color: rgb(0, 0, 0);
+            cursor: pointer;
+            border-radius: 10px;
+            font-size: 18px;
+            border: 2px solid #808080;
+            display: flex;
+            align-items: center; 
+            justify-content: center; 
+        }
+        .button-container {
+            display: flex;
+            justify-content: space-around;
+        }
+        button:hover {
+            color: #00fdf5;
+            background: rgb(0, 0, 0);
+            border: 2px solid #00fdf5; 
+        }
+        textarea {
+            width: 100%;
+        }
+        #inputText {
+            width: 200px;
+            height: 50px;
+            border-radius: 10px;
+            font-size: 20px;
+            font-weight: bold;
+        }
+        #outputText {
+            width: 200px;
+            height: 100px;
+            border-radius: 10px;
+            font-size: 20px;
+            color: #00fdf5;
+            background-color: black;
+            font-weight: bold;
+        }
+        #inputText:focus {
+            outline: 2px solid rgb(123, 199, 186);  
+        }
+        #outputText:focus {
+            outline: 0px solid #808080;  
+        }
+        .copyButton {
+            background-color: black;
+            width: 80px;
+            color: #fff;
+            font-size: 16px; 
+        }
+        .clearButton {
+            background-color: black;
+            color: #fff;
+            font-size: 16px;
+            padding: 10px;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+        #copyMessage {
+            margin-top: 10px;
+            color: #808080; 
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h3>加密结果为隐藏的不可见字符</h3>
+    <textarea id="inputText" placeholder="输入文本..."></textarea>
+    <div class="button-container">
+        <button onclick="encryptText()">加密</button>
+        <button onclick="decryptText()">解密</button>
+    </div>
+    <div>
+        <button onclick="clearInput()" class="clearButton">清空</button>
+    </div>
+    <br>
+    <textarea id="outputText" rows="4" cols="50" placeholder="结果显示..." readonly></textarea>
+    <br>
+    <button onclick="copyToClipboard()" class="copyButton">复制</button>
+    <div id="copyMessage"></div>
+    <script src="e.js"></script>
+</body>
+</html>
