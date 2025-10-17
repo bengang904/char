@@ -1,0 +1,208 @@
+<!DOCTYPE html> 
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>笔记</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            padding: 30px;
+        }
+        .content {
+            background-color: #fff;
+            border: 1px solid #ccc;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            max-width: 800px;
+            margin: 0 auto;
+            font-size: 16px;
+            line-height: 1.6;
+        }
+        pre {
+            background-color: #161631;
+            color: #ffffff;
+            border-left: 5px solid #ccc;
+            padding: 10px;
+            overflow: auto;
+            font-family: Consolas, 'Courier New', monospace;
+            white-space: pre-wrap;
+        }
+        blockquote {
+            padding: 10px 20px;
+            margin: 0;
+            border-left: 5px solid #ccc;
+            background-color: #f9f9f9;
+            font-style: italic;
+        }
+        .ql-align-center { text-align: center; }
+        .ql-align-right { text-align: right; }
+        .ql-align-justify { text-align: justify; }
+        .ql-font-serif { font-family: serif; }
+        .button-container {
+            display: flex;
+            justify-content: center; 
+            margin-top: 20px;
+        }
+        .save-button, .edit-button {
+            padding: 10px 20px;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+            margin: 0 5px;
+        }
+        .save-button {
+          background-color: #6b86f4;
+        }
+        .edit-button {
+          background-color:rgb(92, 103, 130);
+        }
+        .save-button:hover {
+          background-color: #4591e1;
+        }
+        .edit-button:hover {
+            background-color: #434343;
+        }
+        #editorModal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            justify-content: center;
+            align-items: center;
+        }
+        #editorContainer {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            width: 80%;
+            max-width: 800px;
+        }
+        .bn {
+            padding: 5px 10px;
+            background-color: #161631;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+            margin: 10px 5px;
+        }
+    </style>
+    <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+</head>
+<body>
+    <div id="messageBox" class="content"></div>
+    <div class="button-container">
+        <button id="editButton" class="edit-button">编辑</button>
+        <button id="saveButton" class="save-button">保存</button>
+    </div>
+
+    <div id="editorModal">
+        <div id="editorContainer">
+            <div id="toolbar">
+                <button class="ql-bold">粗体</button>
+                <button class="ql-italic">斜体</button>
+                <button class="ql-underline">下划线</button>
+                <button class="ql-strike">删除线</button>
+                <select class="ql-font">
+                    <option value="serif">衬线</option>
+                    <option selected>无衬线</option>
+                </select>
+                <select class="ql-size">
+                    <option value="small">小</option>
+                    <option selected>正常</option>
+                    <option value="large">大</option>
+                    <option value="huge">超大</option>
+                </select>
+                <select class="ql-color"></select>
+                <select class="ql-background"></select>
+                <button class="ql-align" value="">左对齐</button>
+                <button class="ql-align" value="center">居中</button>
+                <button class="ql-align" value="right">右对齐</button>
+                <button class="ql-align" value="justify">两端对齐</button>
+                <select class="ql-header">
+                    <option value="1">标题 1</option>
+                    <option value="2">标题 2</option>
+                    <option selected>普通文本</option>
+                </select>
+                <button class="ql-list" value="ordered">有序列表</button>
+                <button class="ql-list" value="bullet">无序列表</button>
+                <button class="ql-blockquote">引用</button>
+                <button class="ql-code-block">代码块</button>
+                <button class="ql-link">插入链接</button>
+                <button class="ql-image">插入图片</button>
+                <button class="ql-video">插入视频</button>
+            </div>
+            <div id="editor" style="height: 300px;"></div>
+            <button onclick="saveEditorContent()" class="bn">确认</button>
+            <button onclick="closeEditor()" class="bn">关闭</button>
+        </div>
+    </div>
+
+    <script>
+        window.onload = function() {
+            const message = localStorage.getItem('message');
+            if (message) {
+                document.getElementById('messageBox').innerHTML = message;
+                localStorage.removeItem('message');
+            }
+            document.getElementById('saveButton').addEventListener('click', savePage);
+            document.getElementById('editButton').addEventListener('click', openEditor);
+        }
+
+        const quill = new Quill('#editor', {
+            theme: 'snow',
+            modules: {
+                toolbar: '#toolbar'
+            }
+        });
+
+        function openEditor() {
+            const currentContent = document.getElementById('messageBox').innerHTML;
+            quill.root.innerHTML = currentContent; 
+            document.getElementById('editorModal').style.display = 'flex';
+        }
+
+        function closeEditor() {
+            document.getElementById('editorModal').style.display = 'none';
+        }
+
+        function saveEditorContent() {
+            const newContent = quill.root.innerHTML;
+            document.getElementById('messageBox').innerHTML = newContent; 
+            closeEditor();
+        }
+
+        async function savePage() {
+            try {
+                const pageContent = document.documentElement.outerHTML;
+                const blob = new Blob([pageContent], { type: 'text/html' });
+                const fileHandle = await window.showSaveFilePicker({
+                    suggestedName: '笔记.html',
+                    types: [{
+                        description: 'HTML 文件',
+                        accept: {'text/html': ['.html']},
+                    }],
+                });
+                const writableStream = await fileHandle.createWritable();
+                await writableStream.write(blob);
+                await writableStream.close();
+                alert('页面已保存！');
+            } catch (error) {
+                console.error('保存页面时出错:', error);
+            }
+        }
+    </script>
+</body>
+</html>
