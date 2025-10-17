@@ -2,20 +2,20 @@
     {
         "title": "字符混淆",
         "type": "混淆",
-        "link": "字符混淆/index.html",
-        "thumbnail": "字符混淆/logo.jpg"
+        "link": "web/1",
+        "thumbnail": "web/1/logo.jpg"
     },
     {
         "title": "笔记编辑",
         "type": "编辑",
-        "link": "笔记编辑/index.html",
-       "thumbnail": "笔记编辑/logo.jpg"
+        "link": "web/2",
+       "thumbnail": "web/2/logo.jpg"
     },
     {
         "title": "字符装饰",
         "type": "装饰",
-        "link": "字符装饰/index.html",
-       "thumbnail": "字符装饰/logo.jpg"
+        "link": "web/3",
+       "thumbnail": "web/3/logo.jpg"
     }
 ]
 
