@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="shortcut icon" href="logo.jpg" type="image/jpeg">
+    <title>Unicode 字符库</title> 
+    <style>
+        body {
+            background: #f4f4f4;
+            padding: 2rem;
+            line-height: 1.5;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+        .search-box {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        input[type="text"] {
+            padding: 0.5rem;
+            font-size: 1rem;
+            width: 80%;
+            max-width: 400px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            box-sizing: border-box;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 1rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            text-align: center;
+            padding: 1rem 0.5rem;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+            background: #e0f7fa;
+        }
+        .char {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            user-select: none;
+            font-weight: 500;
+            font-optical-sizing: auto;
+        }
+        .label {
+            font-size: 0.8rem;
+            color: #555;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            padding: 0 5px;
+        }
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #333;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            opacity: 0;
+            transition: opacity 0.3s;
+            z-index: 1000;
+        }
+        .toast.show {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <div class="search-box">
+        <input type="text" id="search" placeholder="输入关键字或符号名称...">
+    </div>
+    <div class="grid" id="grid"></div>
+    <div class="toast" id="toast">已复制！</div>
+
+    <script>
+        const grid = document.getElementById('grid');
+        const toast = document.getElementById('toast');
+        const searchInput = document.getElementById('search');
+
+        async function loadSymbols() {
+            try {
+                const response = await fetch('symbols.json'); 
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const data = await response.json();
+                return data;
+            } catch (error) {
+                console.error("加载 symbols.json 失败:", error);
+                return []; 
+            }
+        }
+
+        function showToast(message) {
+            toast.textContent = message;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 1500);
+        }
+
+        function render(symbolsToRender) {
+            grid.innerHTML = '';
+            symbolsToRender.forEach(({ char, label }) => {
+                const div = document.createElement('div');
+                div.className = 'card';
+                div.title = label;
+
+                const displayChar = char.length <= 2 ? char : char.slice(-2);
+
+                div.innerHTML = `
+                    <div class="char">${displayChar}</div>
+                    <div class="label">${label}</div>
+                `;
+                
+                div.onclick = () => {
+                    navigator.clipboard.writeText(char).then(() => {
+                        showToast('已复制：' + char);
+                    }).catch(err => {
+                        console.error('复制失败:', err);
+                        showToast('复制失败 (请检查权限)');
+                    });
+                };
+                grid.appendChild(div);
+            });
+
+            if (symbolsToRender.length === 0) {
+                grid.innerHTML = `
+                    <p style="grid-column: 1 / -1; text-align: center; color: #888;">
+                        未找到匹配的符号。
+                    </p>`;
+            }
+        }
+
+        let symbols = [];
+
+        loadSymbols().then(data => {
+            symbols = data;
+            render(symbols);
+
+            searchInput.addEventListener('input', (e) => {
+                const query = e.target.value.toLowerCase();
+                
+                if (!query) {
+                    render(symbols);
+                    return;
+                }
+
+                const filtered = symbols.filter(s => 
+                    s.label.toLowerCase().includes(query) || 
+                    s.char.includes(query)
+                );
+                render(filtered);
+            });
+        });
+    </script>
+</body>
+</html>
