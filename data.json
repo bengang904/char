@@ -1,6 +1,6 @@
 [
     {
-        "title": "字符混淆",
+        "title": "字符串混淆",
         "type": "混淆",
         "link": "web/1",
         "thumbnail": "web/1/logo.jpg"
@@ -22,8 +22,15 @@
         "type": "字符库",
         "link": "web/4",
        "thumbnail": "web/4/logo.jpg"
+    },
+    {
+        "title": "交互式PDF(字符串混淆)",
+        "type": "交互式PDF",
+        "link": "web/5",
+       "thumbnail": "web/5/logo.png"
     }
 ]
+
 
 
 
