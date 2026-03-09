@@ -159,7 +159,7 @@
                 const data = await res.json();
                 
                 container.innerHTML = data.map(item => `
-                    <a href="${item.link}" class="card">
+                   <a href="${item.link}" class="card" target="_blank">
                         <div class="img-wrap">
                             <img src="${item.thumbnail}" onerror="this.src='data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'">
                         </div>
