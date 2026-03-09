@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <link rel="shortcut icon" href="https://2024-10-24.zip/images/text.png" type="image/jpeg">
+    <title>TEXT.</title>
+    <style>
+        :root {
+            --bg: #000000;
+            --card: #080808;
+            --border: #1a1a1a;
+            --accent: #ffffff;
+            --text: #ffffff;
+            --text-dim: #666;
+            --content-width: 1200px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            border-radius: 0 !important;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Inter', -apple-system, system-ui, sans-serif;
+            padding: 24px 16px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        header {
+            width: 100%;
+            max-width: var(--content-width);
+            margin-bottom: 30px;
+            padding: 0 4px;
+        }
+
+        header h1 {
+            font-size: clamp(10px, 3vw, 13px);
+            letter-spacing: clamp(2px, 2vw, 8px);
+            text-transform: uppercase;
+            font-weight: 900;
+            color: var(--text);
+            border-left: 3px solid var(--accent);
+            padding-left: 12px;
+            white-space: nowrap;
+        }
+
+        #container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, 180px);
+            gap: 16px;
+            width: 100%;
+            max-width: var(--content-width);
+            justify-content: center;
+        }
+
+        @media (max-width: 440px) {
+            #container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 300px) {
+            #container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            text-decoration: none;
+            color: inherit;
+            display: flex;
+            flex-direction: column;
+            transition: border-color 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .img-wrap {
+            width: 100%;
+            aspect-ratio: 1 / 1;
+            overflow: hidden;
+            background: #000;
+            position: relative;
+        }
+
+        .img-wrap img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .card:hover {
+            border-color: var(--accent);
+        }
+
+        .meta {
+            padding: 14px;
+            background: var(--card);
+            border-top: 1px solid var(--border);
+        }
+
+        .type {
+            font-size: 9px;
+            color: var(--accent);
+            text-transform: uppercase;
+            font-weight: 800;
+            margin-bottom: 6px;
+            letter-spacing: 2px;
+            display: block;
+        }
+
+        .name {
+            font-size: 15px;
+            font-weight: 700;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: block;
+            letter-spacing: -0.3px;
+        }
+
+        .card:active {
+            transform: scale(0.98);
+        }
+
+        #status {
+            margin-top: 40px;
+            font-size: 9px;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>TEXT.</h1>
+    </header>
+
+    <div id="container"></div>
+    <div id="status">System Online</div>
+
+    <script>
+        async function fetchApps() {
+            const container = document.getElementById('container');
+            try {
+                const res = await fetch('data.json');
+                const data = await res.json();
+                
+                container.innerHTML = data.map(item => `
+                    <a href="${item.link}" class="card">
+                        <div class="img-wrap">
+                            <img src="${item.thumbnail}" onerror="this.src='data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'">
+                        </div>
+                        <div class="meta">
+                            <span class="type">${item.type}</span>
+                            <span class="name">${item.title}</span>
+                        </div>
+                    </a>
+                `).join('');
+            } catch (e) {
+                document.getElementById('status').textContent = 'Sync Failed';
+            }
+        }
+        fetchApps();
+    </script>
+</body>
+</html>
