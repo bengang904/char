@@ -127,8 +127,8 @@
         }
 
         .btn-copy {
-            background: #f5f5f5;
-            color: #666;
+            background: #000000;
+            color: #ffffff;
             border: 1px solid #eee;
             width: auto;
             font-size: 10px;
@@ -167,16 +167,13 @@
             <div class="header">接收端</div>
             <div class="warning-box">注意：不要刷新页面，否则将导致内存中的私钥丢失!!!</div>
             
-            <span class="label">01 密钥管理</span>
-            <button onclick="generate()">生成公钥</button>
-            
-            <span class="label">02 我的隐形公钥</span>
-            <textarea id="pubKey" readonly placeholder="密钥尚未生成"></textarea>
-            <button class="btn-copy" onclick="copy('pubKey')">复制公钥 (,,)</button>
+            <span class="label">01 已生成密钥对</span>
+            <textarea id="pubKey" readonly placeholder="正在初始化密钥对..."></textarea>
+            <button class="btn-copy" onclick="copy('pubKey')">复制公钥并分享给对方</button>
 
-            <span class="label" style="margin-top: 20px;">03 混合解密</span>
+            <span class="label" style="margin-top: 20px;">02 解密</span>
             <textarea id="cipherInput" placeholder="粘贴对方发送的 (..) 混合载荷"></textarea>
-            <button onclick="decrypt()">执行混合解密</button>
+            <button onclick="decrypt()">执行解密</button>
             
             <span class="label">解密原文</span>
             <div id="result" class="res-box"></div>
@@ -191,11 +188,11 @@
             <textarea id="pubInput" placeholder="粘贴接收方的隐形公钥 (,,)"></textarea>
 
             <span class="label">02 原始消息</span>
-            <textarea id="msgInput" placeholder="输入需要加密的长内容..."></textarea>
+            <textarea id="msgInput" placeholder="输入需要加密的内容"></textarea>
             
-            <button onclick="encrypt()">执行混合加密</button>
+            <button onclick="encrypt()">执行加密</button>
 
-            <span class="label">03 混合密文载荷</span>
+            <span class="label">03 密文生成</span>
             <textarea id="output" readonly placeholder="等待执行"></textarea>
             <button class="btn-copy" onclick="copy('output')">复制密文 (..)</button>
         </div>
@@ -204,9 +201,12 @@
     <script>
         let privateKeyStore;
 
-        function initMode(mode) {
+        async function initMode(mode) {
             document.getElementById('mode-selector').style.display = 'none';
             document.getElementById(mode + '-ui').style.display = 'flex';
+            if (mode === 'receiver') {
+                await generate();
+            }
         }
 
         async function copy(id) {
@@ -214,7 +214,7 @@
             if (!el.value) return;
             try {
                 await navigator.clipboard.writeText(el.value);
-                alert("已成功复制（静默模式）");
+                alert("已成功复制公钥到粘贴板");
             } catch (err) {
                 alert("复制失败");
             }
@@ -238,9 +238,9 @@
                 const exp = await window.crypto.subtle.exportKey("spki", p.publicKey);
                 const b64 = btoa(String.fromCharCode(...new Uint8Array(exp)));
                 document.getElementById('pubKey').value = `,${zwE(b64)},`;
-                alert("RSA 混合加密环境已就绪");
+                console.log("RSA 密钥对已自动生成");
             } catch (e) {
-                alert("生成失败");
+                alert("密钥初始化失败，请尝试刷新页面");
             }
         }
 
