@@ -1,9 +1,21 @@
 [
     {
-        "title": "文本加密",
+        "title": "安全密钥交换",
+        "type": "加密",
+        "link": "https://key.2024-10-24.zip",
+        "thumbnail": "https://2024-10-24.zip/images/key.jpg"
+    },
+    {
+        "title": "文本单方加密",
         "type": "加密",
         "link": "web/1",
         "thumbnail": "web/1/logo.png"
+    },
+     {
+        "title": "文本双方加密",
+        "type": "加密",
+        "link": "web/2",
+        "thumbnail": "web/2/logo.jpg"
     }
 ]
 
