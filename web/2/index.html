@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RSA + AES 混合加密通信</title>
+    <style>
+        :root {
+            --bg-page: #f8f9fa;
+            --border-color: #eeeeee;
+            --text-main: #1a1a1a;
+            --accent-color: #000000;
+            --shadow: 0 4px 20px rgba(0,0,0,0.05);
+        }
+
+        * { box-sizing: border-box; border-radius: 0 !important; }
+
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #ddd; }
+
+        body {
+            background: var(--bg-page);
+            color: var(--text-main);
+            font-family: -apple-system, "Noto Sans SC", sans-serif;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        #mode-selector {
+            background: #ffffff;
+            padding: 50px;
+            border: 1px solid var(--border-color);
+            text-align: center;
+            max-width: 450px;
+            width: 100%;
+            box-shadow: var(--shadow);
+        }
+
+        .main-wrapper {
+            display: none;
+            width: 100%;
+            max-width: 600px;
+            border: 1px solid var(--border-color);
+            background: #ffffff;
+            box-shadow: var(--shadow);
+        }
+
+        .terminal {
+            flex: 1;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            font-size: 11px;
+            font-weight: 800;
+            margin-bottom: 30px;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            text-align: center;
+            color: #999;
+        }
+
+        .warning-box {
+            background: #fdfdfd;
+            color: #f06060;
+            padding: 15px;
+            font-size: 11px;
+            margin-bottom: 25px;
+            border: 1px solid #f06060;
+            line-height: 1.6;
+            text-align: center;
+        }
+
+        .label {
+            display: block;
+            margin-bottom: 10px;
+            font-size: 11px;
+            font-weight: 700;
+            color: #333;
+        }
+
+        textarea {
+            width: 100%;
+            height: 90px;
+            padding: 15px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            resize: none;
+            margin-bottom: 15px;
+            border: 1px solid #eee;
+            background: #fafafa;
+            color: #1a1a1a;
+            outline: none;
+            transition: 0.3s;
+            user-select: none; 
+        }
+
+        textarea:focus {
+            border-color: #000;
+            background: #fff;
+        }
+
+        button {
+            width: 100%;
+            padding: 15px;
+            border: 1px solid #000;
+            background: #000;
+            color: #fff;
+            font-weight: 700;
+            cursor: pointer;
+            margin-bottom: 15px;
+            font-size: 12px;
+            letter-spacing: 1px;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background: #333;
+            border-color: #333;
+        }
+
+        .btn-copy {
+            background: #f5f5f5;
+            color: #666;
+            border: 1px solid #eee;
+            width: auto;
+            font-size: 10px;
+            padding: 8px 15px;
+        }
+
+        .btn-copy:hover {
+            background: #000;
+            color: #fff;
+            border-color: #000;
+        }
+
+        .res-box {
+            padding: 20px;
+            min-height: 60px;
+            font-size: 14px;
+            word-break: break-all;
+            font-family: monospace;
+            border: 1px dashed #eee;
+            background: #fafafa;
+            color: #1a1a1a;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="mode-selector">
+        <h2 style="margin-top:0; font-weight: 800; letter-spacing: 5px; color: #000;">RSA + AES 通信</h2>
+        <p style="color: #999; font-size: 11px; margin-bottom: 40px;">混合加密载荷终端</p>
+        <button onclick="initMode('receiver')">进入接收端</button>
+        <button style="background: #fff; color: #000;" onclick="initMode('sender')">进入发送端</button>
+    </div>
+
+    <div id="receiver-ui" class="main-wrapper">
+        <div class="terminal">
+            <div class="header">接收端</div>
+            <div class="warning-box">注意：不要刷新页面，否则将导致内存中的私钥丢失!!!</div>
+            
+            <span class="label">01 密钥管理</span>
+            <button onclick="generate()">生成公钥</button>
+            
+            <span class="label">02 我的隐形公钥</span>
+            <textarea id="pubKey" readonly placeholder="密钥尚未生成"></textarea>
+            <button class="btn-copy" onclick="copy('pubKey')">复制公钥 (,,)</button>
+
+            <span class="label" style="margin-top: 20px;">03 混合解密</span>
+            <textarea id="cipherInput" placeholder="粘贴对方发送的 (..) 混合载荷"></textarea>
+            <button onclick="decrypt()">执行混合解密</button>
+            
+            <span class="label">解密原文</span>
+            <div id="result" class="res-box"></div>
+        </div>
+    </div>
+
+    <div id="sender-ui" class="main-wrapper">
+        <div class="terminal">
+            <div class="header">发送端</div>
+            
+            <span class="label">01 目标公钥</span>
+            <textarea id="pubInput" placeholder="粘贴接收方的隐形公钥 (,,)"></textarea>
+
+            <span class="label">02 原始消息</span>
+            <textarea id="msgInput" placeholder="输入需要加密的长内容..."></textarea>
+            
+            <button onclick="encrypt()">执行混合加密</button>
+
+            <span class="label">03 混合密文载荷</span>
+            <textarea id="output" readonly placeholder="等待执行"></textarea>
+            <button class="btn-copy" onclick="copy('output')">复制密文 (..)</button>
+        </div>
+    </div>
+
+    <script>
+        let privateKeyStore;
+
+        function initMode(mode) {
+            document.getElementById('mode-selector').style.display = 'none';
+            document.getElementById(mode + '-ui').style.display = 'flex';
+        }
+
+        async function copy(id) {
+            const el = document.getElementById(id);
+            if (!el.value) return;
+            try {
+                await navigator.clipboard.writeText(el.value);
+                alert("已成功复制（静默模式）");
+            } catch (err) {
+                alert("复制失败");
+            }
+        }
+
+        const zwE = (t) => t.split('').map(c => c.charCodeAt(0).toString(2).padStart(8, '0')).join('').split('').map(b => b === '1' ? '\u200c' : '\u2060').join('');
+        const zwD = (z) => {
+            const b = z.split('').filter(c => c === '\u200c' || c === '\u2060').map(c => c === '\u200c' ? '1' : '0').join('');
+            let t = '';
+            for (let i = 0; i < b.length; i += 8) t += String.fromCharCode(parseInt(b.substr(i, 8), 2));
+            return t;
+        };
+
+        async function generate() {
+            try {
+                const p = await window.crypto.subtle.generateKey(
+                    { name: "RSA-OAEP", modulusLength: 2048, publicExponent: new Uint8Array([1, 0, 1]), hash: "SHA-256" },
+                    true, ["encrypt", "decrypt"]
+                );
+                privateKeyStore = p.privateKey;
+                const exp = await window.crypto.subtle.exportKey("spki", p.publicKey);
+                const b64 = btoa(String.fromCharCode(...new Uint8Array(exp)));
+                document.getElementById('pubKey').value = `,${zwE(b64)},`;
+                alert("RSA 混合加密环境已就绪");
+            } catch (e) {
+                alert("生成失败");
+            }
+        }
+
+        async function decrypt() {
+            if (!privateKeyStore) return alert("私钥缺失");
+            try {
+                const raw = document.getElementById('cipherInput').value;
+                const m = raw.match(/\.(.*)\./);
+                if (!m) throw new Error("载荷格式错误");
+                
+                const combinedB64 = zwD(m[1]);
+                const combinedData = JSON.parse(atob(combinedB64));
+
+                const encryptedAesKey = Uint8Array.from(atob(combinedData.k), c => c.charCodeAt(0));
+                const aesIv = Uint8Array.from(atob(combinedData.i), c => c.charCodeAt(0));
+                const encryptedContent = Uint8Array.from(atob(combinedData.c), c => c.charCodeAt(0));
+
+                const aesKeyRaw = await window.crypto.subtle.decrypt({ name: "RSA-OAEP" }, privateKeyStore, encryptedAesKey);
+                const aesKey = await window.crypto.subtle.importKey("raw", aesKeyRaw, { name: "AES-GCM" }, false, ["decrypt"]);
+
+                const decrypted = await window.crypto.subtle.decrypt(
+                    { name: "AES-GCM", iv: aesIv },
+                    aesKey,
+                    encryptedContent
+                );
+
+                document.getElementById('result').innerText = new TextDecoder().decode(decrypted);
+                alert("混合解密完成");
+            } catch (e) {
+                document.getElementById('result').innerText = "";
+                alert("解析失败：载荷无效或密钥不匹配");
+            }
+        }
+
+        async function encrypt() {
+            try {
+                const pi = document.getElementById('pubInput').value;
+                const msg = document.getElementById('msgInput').value;
+                const m = pi.match(/,(.*),/);
+                if (!m || !msg) throw new Error();
+
+                const pubB64 = zwD(m[1]);
+                const rsaPubKey = await window.crypto.subtle.importKey(
+                    "spki", Uint8Array.from(atob(pubB64), c => c.charCodeAt(0)),
+                    { name: "RSA-OAEP", hash: "SHA-256" }, false, ["encrypt"]
+                );
+
+                const aesKey = await window.crypto.subtle.generateKey({ name: "AES-GCM", length: 256 }, true, ["encrypt"]);
+                const aesKeyRaw = await window.crypto.subtle.exportKey("raw", aesKey);
+                const encryptedAesKey = await window.crypto.subtle.encrypt({ name: "RSA-OAEP" }, rsaPubKey, aesKeyRaw);
+
+                const iv = window.crypto.getRandomValues(new Uint8Array(12));
+                const encryptedContent = await window.crypto.subtle.encrypt(
+                    { name: "AES-GCM", iv: iv },
+                    aesKey,
+                    new TextEncoder().encode(msg)
+                );
+
+                const packet = {
+                    k: btoa(String.fromCharCode(...new Uint8Array(encryptedAesKey))),
+                    i: btoa(String.fromCharCode(...new Uint8Array(iv))),
+                    c: btoa(String.fromCharCode(...new Uint8Array(encryptedContent)))
+                };
+
+                const packetB64 = btoa(JSON.stringify(packet));
+                document.getElementById('output').value = `.${zwE(packetB64)}.`;
+                alert("混合加密载荷已生成");
+            } catch (e) {
+                alert("加密失败，请检查公钥和明文");
+            }
+        }
+    </script>
+</body>
+</html>
