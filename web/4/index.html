@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>代码编辑器</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.14/codemirror.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.14/theme/dracula.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.14/addon/dialog/dialog.min.css"> 
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="phone.css">
+</head>
+<body>
+<div class="topbar">
+    <div class="menu-left">
+        <div id="file-menu-item"><span>文件</span>
+            <div class="submenu">
+                <a id="new-file-btn">新建文件</a>
+                <a id="open-file-btn">打开文件</a>
+                <a id="save-file-btn">保存 (Ctrl+S)</a>
+                <a id="close-tab-btn">关闭文件</a>
+                <a id="save-as-btn">另存为...</a>
+                <hr style="margin:5px 0;border-color:#444">
+                <a id="import-folder-btn">打开文件夹...</a>
+            </div>
+        </div>
+        <div id="edit-menu-item"><span>编辑</span>
+            <div class="submenu">
+                <a id="undo-btn">撤销 (Ctrl+Z)</a>
+                <a id="redo-btn">恢复 (Ctrl+Y)</a>
+                <hr style="margin:5px 0;border-color:#444">
+                <a id="select-all-btn">全选 (Ctrl+A)</a>
+                <a id="cut-btn">剪切 (Ctrl+X)</a>
+                <a id="copy-btn">复制 (Ctrl+C)</a>
+                <a id="paste-btn">粘贴 (Ctrl+V)</a>
+                <hr style="margin:5px 0;border-color:#444">
+                <a id="find-btn">查找 (Ctrl+F)</a>
+                <a id="replace-btn">替换 (Ctrl+H)</a>
+            </div>
+        </div>
+    </div>
+    <button id="run-btn" disabled>▶</button>
+</div>
+
+<div class="main-content">
+    <div class="sidebar-wrapper">
+        <div id="sidebar">
+            <div style="padding:0 10px;font-weight:bold;margin-bottom:5px">项目结构</div>
+            <ul id="project-tree" class="project-structure"></ul>
+        </div>
+        <div id="sidebar-resizer" class="sidebar-resizer"></div>
+    </div>
+
+    <div class="editor-container">
+        <div id="tabs-bar" class="tabs-bar"></div>
+        <div id="editor-wrapper" class="editor-wrapper"></div>
+        <div id="terminal-wrapper">
+            <div id="terminal-resizer" class="terminal-resizer"></div>
+            <div id="terminal"></div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.14/codemirror.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.14/mode/python/python.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.14/addon/search/searchcursor.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.14/addon/dialog/dialog.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.14/addon/edit/matchbrackets.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.14/addon/search/search.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.14/addon/search/matchesonscrollbar.min.js"></script>
+<script src="https://cdn.jsdelivr.net/pyodide/v0.23.4/full/pyodide.js"></script>
+<script src="script.js"></script>
+<script src="phone.js"></script>
+</body>
+</html>
+
