@@ -1,3 +1,9 @@
+@media screen and (min-width: 769px) {
+    .mobile-menu-toggle, .sidebar-close-btn {
+        display: none !important;
+    }
+}
+
 @media screen and (max-width: 768px) {
     body {
         height: 100vh; 
@@ -21,7 +27,7 @@
 
     #run-btn {
         margin-right: 12px;
-        background: transparent;
+        background: transparent !important;
         border: none;
         padding: 5px;
         display: flex;
@@ -33,6 +39,8 @@
         background: transparent;
         border: none;
         width: 44px; height: 44px;
+        align-items: center;
+        justify-content: center;
     }
     .mobile-menu-toggle svg { width: 26px; height: 26px; fill: white; }
 
@@ -61,6 +69,7 @@
         display: flex;
         align-items: center;
         justify-content: center;
+        cursor: pointer;
     }
     .sidebar-close-btn svg { width: 24px; height: 24px; fill: #ccc; }
 
