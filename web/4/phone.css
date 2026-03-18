@@ -1,0 +1,150 @@
+@media screen and (max-width: 768px) {
+    .topbar {
+        padding: 0 5px;
+        height: 50px;
+        font-size: 14px;
+        justify-content: space-between;
+    }
+
+    .sidebar-wrapper {
+        position: absolute;
+        left: -260px;
+        top: 50px;
+        bottom: 0;
+        width: 250px !important;
+        z-index: 1000;
+        background: #1e1e1e;
+        transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: 5px 0 15px rgba(0,0,0,0.5);
+    }
+
+    .sidebar-wrapper.mobile-open {
+        left: 0;
+    }
+
+    .sidebar-resizer {
+        display: none !important;
+    }
+
+    .main-content {
+        position: relative;
+        overflow: hidden;
+    }
+
+    .editor-container {
+        width: 100% !important;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        height: calc(100vh - 50px);
+    }
+
+    .mobile-menu-toggle {
+        display: flex !important;
+        align-items: center;
+        justify-content: center;
+        background: transparent;
+        color: white;
+        border: none;
+        width: 40px;
+        height: 40px;
+        margin-right: 5px;
+        cursor: pointer;
+    }
+
+    .hamburger-icon {
+        position: relative;
+        width: 20px;
+        height: 2px;
+        background: white;
+    }
+
+    .hamburger-icon::before,
+    .hamburger-icon::after {
+        content: "";
+        position: absolute;
+        width: 20px;
+        height: 2px;
+        background: white;
+        left: 0;
+    }
+
+    .hamburger-icon::before {
+        top: -6px;
+    }
+
+    .hamburger-icon::after {
+        bottom: -6px;
+    }
+
+    #terminal-wrapper {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        width: 100%;
+        background: #1e1e1e;
+        z-index: 500;
+        display: flex;
+        flex-direction: column;
+        height: 35vh;
+        border-top: 1px solid #444;
+        transition: none;
+    }
+
+    .terminal-resizer {
+        display: flex !important;
+        height: 35px !important;
+        background: #2d2d2d !important;
+        cursor: row-resize;
+        align-items: center;
+        justify-content: center;
+        touch-action: none;
+        flex-shrink: 0;
+    }
+
+    .terminal-resizer::after {
+        content: "";
+        width: 35px;
+        height: 4px;
+        background: #666;
+        border-radius: 2px;
+    }
+
+    #terminal {
+        flex: 1;
+        font-size: 12px;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+        padding: 5px;
+    }
+
+    .tabs-bar {
+        overflow-x: auto;
+        white-space: nowrap;
+        display: flex;
+        height: 35px;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .tab {
+        flex: 0 0 auto;
+        padding: 0 15px;
+        font-size: 13px;
+    }
+
+    .CodeMirror {
+        font-size: 16px !important;
+        flex: 1;
+    }
+
+    .menu-left .submenu {
+        width: 160px;
+    }
+}
+
+@media screen and (min-width: 769px) {
+    .mobile-menu-toggle {
+        display: none;
+    }
+}
