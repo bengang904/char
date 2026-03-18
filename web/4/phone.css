@@ -1,150 +1,112 @@
 @media screen and (max-width: 768px) {
-    .topbar {
-        padding: 0 5px;
-        height: 50px;
-        font-size: 14px;
-        justify-content: space-between;
+    body {
+        height: 100vh; 
+        width: 100vw;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        margin: 0;
     }
+
+    .topbar {
+        padding: 0 10px;
+        height: 50px;
+        background: #333;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-shrink: 0;
+        z-index: 100;
+    }
+
+    #run-btn {
+        margin-right: 12px;
+        background: transparent;
+        border: none;
+        padding: 5px;
+        display: flex;
+    }
+    #run-btn svg { width: 26px; height: 26px; fill: #4caf50; }
+
+    .mobile-menu-toggle {
+        display: flex;
+        background: transparent;
+        border: none;
+        width: 44px; height: 44px;
+    }
+    .mobile-menu-toggle svg { width: 26px; height: 26px; fill: white; }
 
     .sidebar-wrapper {
-        position: absolute;
-        left: -260px;
-        top: 50px;
+        position: fixed;
+        left: -282px;
+        top: 0;
         bottom: 0;
-        width: 250px !important;
-        z-index: 1000;
-        background: #1e1e1e;
-        transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        box-shadow: 5px 0 15px rgba(0,0,0,0.5);
+        width: 280px !important;
+        z-index: 2000;
+        background: #252526;
+        transition: left 0.15s ease-out;
+        box-shadow: 10px 0 25px rgba(0,0,0,0.5);
     }
+    .sidebar-wrapper.mobile-open { left: 0; }
 
-    .sidebar-wrapper.mobile-open {
-        left: 0;
+    .sidebar-close-btn {
+        position: absolute;
+        right: 10px;
+        top: 10px;
+        width: 36px;
+        height: 36px;
+        background: #333;
+        border: none;
+        border-radius: 6px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
-
-    .sidebar-resizer {
-        display: none !important;
-    }
+    .sidebar-close-btn svg { width: 24px; height: 24px; fill: #ccc; }
 
     .main-content {
-        position: relative;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
         overflow: hidden;
+        position: relative;
     }
 
     .editor-container {
-        width: 100% !important;
-        position: relative;
+        flex: 1;
         display: flex;
         flex-direction: column;
-        height: calc(100vh - 50px);
-    }
-
-    .mobile-menu-toggle {
-        display: flex !important;
-        align-items: center;
-        justify-content: center;
-        background: transparent;
-        color: white;
-        border: none;
-        width: 40px;
-        height: 40px;
-        margin-right: 5px;
-        cursor: pointer;
-    }
-
-    .hamburger-icon {
-        position: relative;
-        width: 20px;
-        height: 2px;
-        background: white;
-    }
-
-    .hamburger-icon::before,
-    .hamburger-icon::after {
-        content: "";
-        position: absolute;
-        width: 20px;
-        height: 2px;
-        background: white;
-        left: 0;
-    }
-
-    .hamburger-icon::before {
-        top: -6px;
-    }
-
-    .hamburger-icon::after {
-        bottom: -6px;
     }
 
     #terminal-wrapper {
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        right: 0;
         width: 100%;
         background: #1e1e1e;
-        z-index: 500;
         display: flex;
         flex-direction: column;
-        height: 35vh;
         border-top: 1px solid #444;
-        transition: none;
-    }
-
-    .terminal-resizer {
-        display: flex !important;
-        height: 35px !important;
-        background: #2d2d2d !important;
-        cursor: row-resize;
-        align-items: center;
-        justify-content: center;
-        touch-action: none;
+        height: 30vh;
         flex-shrink: 0;
     }
 
+    .terminal-resizer {
+        display: flex;
+        height: 30px;
+        background: #2d2d2d;
+        align-items: center;
+        justify-content: center;
+        touch-action: none;
+    }
     .terminal-resizer::after {
-        content: "";
-        width: 35px;
-        height: 4px;
-        background: #666;
-        border-radius: 2px;
+        content: ""; width: 40px; height: 4px;
+        background: #555; border-radius: 2px;
     }
 
     #terminal {
         flex: 1;
         font-size: 12px;
         overflow-y: auto;
-        -webkit-overflow-scrolling: touch;
-        padding: 5px;
+        padding: 10px;
     }
 
-    .tabs-bar {
-        overflow-x: auto;
-        white-space: nowrap;
-        display: flex;
-        height: 35px;
-        -webkit-overflow-scrolling: touch;
-    }
-
-    .tab {
-        flex: 0 0 auto;
-        padding: 0 15px;
-        font-size: 13px;
-    }
-
-    .CodeMirror {
-        font-size: 16px !important;
-        flex: 1;
-    }
-
-    .menu-left .submenu {
-        width: 160px;
-    }
-}
-
-@media screen and (min-width: 769px) {
-    .mobile-menu-toggle {
-        display: none;
-    }
+    .CodeMirror { font-size: 16px !important; flex: 1; }
 }
