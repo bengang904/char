@@ -11,11 +11,17 @@
         "link": "web/2",
         "thumbnail": "web/2/logo.jpg"
     },
-        {
+    {
         "title": "安全密钥交换",
         "type": "加密",
         "link": "web/3",
         "thumbnail": "web/3/logo.jpg"
+    },
+    {
+        "title": "代码编辑器",
+        "type": "编辑",
+        "link": "web/4",
+        "thumbnail": "web/4/logo.png"
     }
 ]
 
