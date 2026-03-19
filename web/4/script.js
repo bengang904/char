@@ -130,6 +130,7 @@ function openFileInTab(name, content, fileHandle = null, providedFileId = null) 
         mode: isPython ? "python" : "text/plain",
         theme: "dracula",
         lineNumbers: true,
+        dragDrop: false, 
         indentUnit: 4,
         tabSize: 4,
         matchBrackets: true,
@@ -447,9 +448,13 @@ const globalClose = (e) => {
 };
 document.addEventListener('click', globalClose);
 document.addEventListener('touchstart', globalClose, { passive: true });
+bodyElement.ondragover = (e) => {
+    e.preventDefault(); 
+};
 
 bodyElement.ondrop = async (e) => {
     e.preventDefault();
+    e.stopPropagation(); 
     const items = e.dataTransfer.items;
     for (let i = 0; i < items.length; i++) {
         if (items[i].kind === 'file') {
