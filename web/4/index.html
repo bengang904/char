@@ -1,16 +1,17 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>代码编辑器</title>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.14/codemirror.min.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.14/theme/dracula.min.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.14/addon/dialog/dialog.min.css"> 
-<link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>代码编辑器</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.14/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.14/theme/dracula.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.14/addon/dialog/dialog.min.css">
+    <link rel="stylesheet" href="style.css">
 <link rel="stylesheet" href="phone.css">
 </head>
 <body>
+
 <div class="topbar">
     <div class="menu-left">
         <div id="file-menu-item"><span>文件</span>
@@ -37,10 +38,10 @@
         </div>
     </div>
     <button id="run-btn" disabled title="运行脚本">
-    <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
-        <path d="M8 5v14l11-7z"/>
-    </svg>
-</button>
+        <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M8 5v14l11-7z"/>
+        </svg>
+    </button>
 </div>
 
 <div class="main-content">
@@ -72,6 +73,6 @@
 <script src="https://cdn.jsdelivr.net/pyodide/v0.23.4/full/pyodide.js"></script>
 <script src="script.js"></script>
 <script src="phone.js"></script>
+
 </body>
 </html>
-
